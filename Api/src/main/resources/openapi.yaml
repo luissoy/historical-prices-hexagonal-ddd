@@ -1,0 +1,198 @@
+openapi: 3.0.3
+info:
+  title: Historical Prices API
+  version: 1.0.0
+  description: |
+    REST API for managing products and their historical prices.
+    Built with a hexagonal architecture and DDD approach.
+    Includes endpoints to create products, manage prices, and query active or historical pricing.
+
+servers:
+  - url: http://localhost:8080/api
+    description: Local environment
+
+tags:
+  - name: Products
+    description: Product and pricing operations
+
+paths:
+  /products:
+    post:
+      tags: [Products]
+      summary: Create a new product
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: Product successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Invalid product data
+
+  /products/{productId}/prices:
+    post:
+      tags: [Products]
+      summary: Add a new price for a product
+      operationId: addPrice
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceRequest'
+      responses:
+        '201':
+          description: Price successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '400':
+          description: Invalid price data or overlapping date range
+        '404':
+          description: Product not found
+
+    get:
+      tags: [Products]
+      summary: Get the complete price history of a product
+      operationId: getProductPriceHistory
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Price history retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductWithPricesResponse'
+        '404':
+          description: Product not found
+
+  /products/{productId}/prices/current:
+    get:
+      tags: [Products]
+      summary: Get the current or applicable price for a given date
+      operationId: getCurrentPrice
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Current price retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '404':
+          description: No active price found for the given date or product
+
+components:
+  schemas:
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Zapatillas deportivas"
+        description:
+          type: string
+          example: "Modelo 2025 edición limitada"
+      required: [name]
+
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Zapatillas deportivas"
+        description:
+          type: string
+          example: "Modelo 2025 edición limitada"
+
+    PriceRequest:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+          example: 99.99
+        initDate:
+          type: string
+          format: date
+          example: 2024-01-01
+        endDate:
+          type: string
+          format: date
+          nullable: true
+          example: 2024-06-30
+      required: [value, initDate]
+
+    PriceResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        productId:
+          type: integer
+          example: 1
+        value:
+          type: number
+          format: double
+          example: 99.99
+        initDate:
+          type: string
+          format: date
+          example: 2024-01-01
+        endDate:
+          type: string
+          format: date
+          nullable: true
+          example: 2024-06-30
+
+    ProductWithPricesResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Zapatillas deportivas"
+        description:
+          type: string
+          example: "Modelo 2025 edición limitada"
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceResponse'
