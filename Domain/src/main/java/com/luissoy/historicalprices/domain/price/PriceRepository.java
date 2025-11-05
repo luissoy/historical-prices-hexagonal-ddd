@@ -11,6 +11,6 @@ public interface PriceRepository {
     Optional<Price> findById(PriceId id);
     List<Price> findByProductId(ProductId productId);
     Optional<Price> findByProductIdAndDate(ProductId id, LocalDateTime date);
-    void save(Price price);
+    Price save(Price price);
     void delete(PriceId id);
 }
