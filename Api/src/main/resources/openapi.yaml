@@ -2,14 +2,12 @@ openapi: 3.0.3
 info:
   title: Historical Prices API
   version: 1.0.0
-  description: |
+  description: >
     REST API for managing products and their historical prices.
-    Built with a hexagonal architecture and DDD approach.
-    Includes endpoints to create products, manage prices, and query active or historical pricing.
-
+    API-first definition (date-times, currency codes, longs for ids).
 servers:
   - url: http://localhost:8080/api
-    description: Local environment
+    description: Local
 
 tags:
   - name: Products
@@ -48,6 +46,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         required: true
         content:
@@ -76,6 +75,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: Price history retrieved successfully
@@ -89,7 +89,7 @@ paths:
   /products/{productId}/prices/current:
     get:
       tags: [Products]
-      summary: Get the current or applicable price for a given date
+      summary: Get the current or applicable price for a given date-time
       operationId: getCurrentPrice
       parameters:
         - name: productId
@@ -97,12 +97,14 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
         - name: date
           in: query
           required: true
           schema:
             type: string
-            format: date
+            format: date-time
+            example: "2024-04-15T10:00:00"
       responses:
         '200':
           description: Current price retrieved successfully
@@ -124,20 +126,20 @@ components:
         description:
           type: string
           example: "Modelo 2025 edición limitada"
-      required: [name]
+      required:
+        - name
 
     ProductResponse:
       type: object
       properties:
         id:
           type: integer
+          format: int64
           example: 1
         name:
           type: string
-          example: "Zapatillas deportivas"
         description:
           type: string
-          example: "Modelo 2025 edición limitada"
 
     PriceRequest:
       type: object
@@ -146,52 +148,56 @@ components:
           type: number
           format: double
           example: 99.99
+        currency:
+          type: string
+          example: "EUR"
+          pattern: "^[A-Z]{3}$"
         initDate:
           type: string
-          format: date
-          example: 2024-01-01
+          format: date-time
+          example: "2024-01-01T00:00:00"
         endDate:
           type: string
-          format: date
-          nullable: true
-          example: 2024-06-30
-      required: [value, initDate]
+          format: date-time
+          example: "2024-06-30T23:59:59"
+      required:
+        - value
+        - currency
+        - initDate
 
     PriceResponse:
       type: object
       properties:
         id:
           type: integer
+          format: int64
           example: 10
         productId:
           type: integer
-          example: 1
+          format: int64
         value:
           type: number
           format: double
-          example: 99.99
+        currency:
+          type: string
+          pattern: "^[A-Z]{3}$"
         initDate:
           type: string
-          format: date
-          example: 2024-01-01
+          format: date-time
         endDate:
           type: string
-          format: date
-          nullable: true
-          example: 2024-06-30
+          format: date-time
 
     ProductWithPricesResponse:
       type: object
       properties:
         id:
           type: integer
-          example: 1
+          format: int64
         name:
           type: string
-          example: "Zapatillas deportivas"
         description:
           type: string
-          example: "Modelo 2025 edición limitada"
         prices:
           type: array
           items:
