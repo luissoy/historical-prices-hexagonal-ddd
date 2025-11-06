@@ -22,8 +22,8 @@ CREATE TABLE prices (
     product_id BIGINT NOT NULL,
     price_value DECIMAL(10, 2) NOT NULL,
     currency_code VARCHAR(10) NOT NULL DEFAULT 'EUR',
-    init_date TIMESTAMP NOT NULL,
-    end_date TIMESTAMP NULL,
+    init_date DATE NOT NULL,
+    end_date DATE NULL,
     CONSTRAINT fk_price_product FOREIGN KEY (product_id)
         REFERENCES products (id)
         ON DELETE CASCADE

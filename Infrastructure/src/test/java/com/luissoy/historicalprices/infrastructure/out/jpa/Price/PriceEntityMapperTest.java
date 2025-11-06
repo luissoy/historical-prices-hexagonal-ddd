@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +31,7 @@ class PriceEntityMapperTest {
                 new PriceId(1L),
                 new ProductId(2L),
                 new Money(BigDecimal.valueOf(99.99), new Currency("EUR")),
-                new DateRange(LocalDateTime.of(2024, 1, 1, 0, 0), null),
+                new DateRange(LocalDate.of(2024, 1, 1), null),
                 List.of()
         );
 
@@ -41,7 +41,7 @@ class PriceEntityMapperTest {
         assertThat(entity.getProductId()).isEqualTo(2L);
         assertThat(entity.getValue()).isEqualByComparingTo(BigDecimal.valueOf(99.99));
         assertThat(entity.getCurrencyCode()).isEqualTo("EUR");
-        assertThat(entity.getInitDate()).isEqualTo(LocalDateTime.of(2024, 1, 1, 0, 0));
+        assertThat(entity.getInitDate()).isEqualTo(LocalDate.of(2024, 1, 1));
         assertThat(entity.getEndDate()).isNull();
     }
 
@@ -51,8 +51,8 @@ class PriceEntityMapperTest {
                 3L,
                 BigDecimal.valueOf(150.00),
                 "USD",
-                LocalDateTime.of(2023, 5, 1, 10, 0),
-                LocalDateTime.of(2023, 12, 1, 10, 0),
+                LocalDate.of(2023, 5, 1),
+                LocalDate.of(2023, 12, 1),
                 5L
         );
 
@@ -62,7 +62,7 @@ class PriceEntityMapperTest {
         assertThat(price.productId().getValue()).isEqualTo(5L);
         assertThat(price.value().amount()).isEqualByComparingTo(BigDecimal.valueOf(150.00));
         assertThat(price.value().currency().code()).isEqualTo("USD");
-        assertThat(price.dateRange().start()).isEqualTo(LocalDateTime.of(2023, 5, 1, 10, 0));
-        assertThat(price.dateRange().end()).isEqualTo(LocalDateTime.of(2023, 12, 1, 10, 0));
+        assertThat(price.dateRange().start()).isEqualTo(LocalDate.of(2023, 5, 1));
+        assertThat(price.dateRange().end()).isEqualTo(LocalDate.of(2023, 12, 1));
     }
 }

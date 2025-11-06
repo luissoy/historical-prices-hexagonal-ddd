@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ class PriceRepositoryAdapterTest {
     @Test
     void findById_shouldReturnPriceDomain() {
         PriceEntity entity = new PriceEntity(1L, BigDecimal.TEN, "EUR",
-                LocalDateTime.now().minusDays(1), LocalDateTime.now(), 10L);
+                LocalDate.now().minusDays(1), LocalDate.now(), 10L);
         when(jpa.findById(1L)).thenReturn(Optional.of(entity));
 
         Optional<Price> result = adapter.findById(new PriceId(1L));
@@ -47,7 +47,7 @@ class PriceRepositoryAdapterTest {
     @Test
     void findByProductId_shouldReturnList() {
         List<PriceEntity> entities = List.of(
-                new PriceEntity(1L, BigDecimal.TEN, "EUR", LocalDateTime.now(), null, 10L)
+                new PriceEntity(1L, BigDecimal.TEN, "EUR", LocalDate.now(), null, 10L)
         );
         when(jpa.findByProductId(10L)).thenReturn(entities);
 
@@ -63,7 +63,7 @@ class PriceRepositoryAdapterTest {
                 new PriceId(1L),
                 new ProductId(10L),
                 new Money(BigDecimal.TEN, new Currency("EUR")),
-                new DateRange(LocalDateTime.now(), null),
+                new DateRange(LocalDate.now(), null),
                 List.of()
         );
         PriceEntity entity = mapper.toEntity(price);

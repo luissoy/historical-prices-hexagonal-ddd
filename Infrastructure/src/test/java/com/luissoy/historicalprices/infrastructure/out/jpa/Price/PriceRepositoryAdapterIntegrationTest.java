@@ -14,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +40,7 @@ class PriceRepositoryAdapterIntegrationTest {
                 null,
                 new ProductId(product.getId()),
                 new Money(BigDecimal.valueOf(9.99), new Currency("EUR")),
-                new DateRange(LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1)),
+                new DateRange(LocalDate.now().minusDays(1), LocalDate.now().plusDays(1)),
                 List.of()
         );
 
@@ -56,7 +56,7 @@ class PriceRepositoryAdapterIntegrationTest {
     void shouldFindByProductId() {
         ProductEntity product = productJpa.save(new ProductEntity(null, "Tablet", "10 inch"));
         PriceEntity price = jpa.save(new PriceEntity(null, BigDecimal.TEN, "EUR",
-                LocalDateTime.now().minusDays(5), LocalDateTime.now().plusDays(5), product.getId()));
+                LocalDate.now().minusDays(5), LocalDate.now().plusDays(5), product.getId()));
 
         List<Price> prices = adapter.findByProductId(new ProductId(price.getProductId()));
 
@@ -67,7 +67,7 @@ class PriceRepositoryAdapterIntegrationTest {
     @Test
     void shouldFindByProductIdAndDate() {
         ProductEntity product = productJpa.save(new ProductEntity(null, "Tablet", "10 inch"));
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
         jpa.save(new PriceEntity(null, BigDecimal.valueOf(15), "USD",
                 now.minusDays(2), now.plusDays(2), product.getId()));
 
