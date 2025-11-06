@@ -145,11 +145,11 @@ class PriceServiceTest {
                 Optional.of(new Product(productId, new ProductName("Test"), new ProductDescription("Desc")))
         );
         when(priceMapper.toDto(any())).thenReturn(
-                new PriceResult(1L, 1L, BigDecimal.TEN, "EUR", prices.get(0).dateRange().start(), prices.get(0).dateRange().end())
+                new PriceResult(1L, 1L, BigDecimal.TEN, "EUR", prices.getFirst().dateRange().start(), prices.getFirst().dateRange().end())
         );
         when(priceMapper.toPriceHistoryDto(any(), any())).thenReturn(
                 new PriceHistoryResult(1L, "Test", "Desc", List.of(
-                        new PriceResult(1L, 1L, BigDecimal.TEN, "EUR", prices.get(0).dateRange().start(), prices.get(0).dateRange().end())
+                        new PriceResult(1L, 1L, BigDecimal.TEN, "EUR", prices.getFirst().dateRange().start(), prices.getFirst().dateRange().end())
                 ))
         );
 
