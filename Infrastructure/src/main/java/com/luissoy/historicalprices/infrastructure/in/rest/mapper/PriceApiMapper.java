@@ -1,10 +1,11 @@
 package com.luissoy.historicalprices.infrastructure.in.rest.mapper;
 
+import com.luissoy.historicalprices.api.model.CurrentPriceResponse;
 import com.luissoy.historicalprices.api.model.PriceRequest;
 import com.luissoy.historicalprices.api.model.PriceResponse;
 import com.luissoy.historicalprices.api.model.ProductWithPricesResponse;
 import com.luissoy.historicalprices.application.price.dto.PriceCommand;
-import com.luissoy.historicalprices.application.price.dto.PriceHistoryResponse;
+import com.luissoy.historicalprices.application.price.dto.PriceHistoryResult;
 import com.luissoy.historicalprices.application.price.dto.PriceResult;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,8 @@ public class PriceApiMapper {
         return new PriceCommand(
                 priceRequest.getValue() == null ? null : BigDecimal.valueOf(priceRequest.getValue()),
                 priceRequest.getCurrency(),
-                priceRequest.getInitDate().toLocalDateTime(),
-                priceRequest.getEndDate() == null ? null : priceRequest.getEndDate().toLocalDateTime()
+                priceRequest.getInitDate(),
+                priceRequest.getEndDate() == null ? null : priceRequest.getEndDate()
         );
     }
 
@@ -27,22 +28,29 @@ public class PriceApiMapper {
         priceResponse.setProductId(result.productId());
         priceResponse.setValue(result.value().doubleValue());
         priceResponse.setCurrency(result.currency());
-        priceResponse.setInitDate(result.startDate() != null ? result.startDate().atOffset(java.time.ZoneOffset.UTC) : null);
-        priceResponse.setEndDate(result.endDate() != null ? result.endDate().atOffset(java.time.ZoneOffset.UTC) : null);
+        priceResponse.setInitDate(result.startDate() != null ? result.startDate() : null);
+        priceResponse.setEndDate(result.endDate() != null ? result.endDate() : null);
         return priceResponse;
     }
 
-    public ProductWithPricesResponse toProductWithPricesResponse(PriceHistoryResponse priceHistoryResponse) {
+    public ProductWithPricesResponse toProductWithPricesResponse(PriceHistoryResult priceHistoryResult) {
         ProductWithPricesResponse response = new ProductWithPricesResponse();
-        response.setId(priceHistoryResponse.productId());
-        response.setName(priceHistoryResponse.productName());
-        response.setDescription(priceHistoryResponse.description());
+        response.setId(priceHistoryResult.productId());
+        response.setName(priceHistoryResult.productName());
+        response.setDescription(priceHistoryResult.description());
 
-        for (PriceResult priceResult : priceHistoryResponse.prices()) {
+        for (PriceResult priceResult : priceHistoryResult.prices()) {
             PriceResponse priceResponse = toPriceResponse(priceResult);
             response.getPrices().add(priceResponse);
         }
 
         return response;
+    }
+
+    public CurrentPriceResponse toCurrentPriceResponse(PriceResult result) {
+        CurrentPriceResponse currentPriceResponse = new CurrentPriceResponse();
+        currentPriceResponse.setCurrency(result.currency());
+        currentPriceResponse.setValue(result.value().doubleValue());
+        return currentPriceResponse;
     }
 }
