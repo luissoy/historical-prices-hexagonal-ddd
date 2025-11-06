@@ -1,9 +1,9 @@
 package com.luissoy.historicalprices.application.product.port.in;
 
 import com.luissoy.historicalprices.application.product.dto.ProductCommand;
-import com.luissoy.historicalprices.application.product.dto.ProductResponse;
+import com.luissoy.historicalprices.application.product.dto.ProductResult;
 
 public interface ProductUseCase {
-    ProductResponse createProduct(ProductCommand command);
-    ProductResponse getProduct(Long productId); // convenience; apps can extend
+    ProductResult createProduct(ProductCommand command);
+    ProductResult getProduct(Long productId);
 }

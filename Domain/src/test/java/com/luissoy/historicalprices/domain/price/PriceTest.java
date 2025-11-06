@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,13 +19,13 @@ class PriceTest {
     @DisplayName("should return true when date is within the date range")
     void isValidFor_shouldReturnTrueWhenDateWithinRange() {
         DateRange range = new DateRange(
-                LocalDateTime.of(2024, 1, 1, 0, 0),
-                LocalDateTime.of(2024, 12, 31, 23, 59)
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 12, 31)
         );
         Price price = new Price(new PriceId(1L), new ProductId(1L),
                 new Money(BigDecimal.TEN, new Currency("EUR")), range);
 
-        boolean valid = price.isValidFor(LocalDateTime.of(2024, 6, 15, 12, 0));
+        boolean valid = price.isValidFor(LocalDate.of(2024, 6, 15));
 
         assertThat(valid).isTrue();
     }
@@ -34,13 +34,13 @@ class PriceTest {
     @DisplayName("should return false when date is outside the date range")
     void isValidFor_shouldReturnFalseWhenDateOutsideRange() {
         DateRange range = new DateRange(
-                LocalDateTime.of(2024, 1, 1, 0, 0),
-                LocalDateTime.of(2024, 1, 31, 23, 59)
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 1, 31)
         );
         Price price = new Price(new PriceId(1L), new ProductId(1L),
                 new Money(BigDecimal.ONE, new Currency("EUR")), range);
 
-        boolean valid = price.isValidFor(LocalDateTime.of(2024, 2, 1, 0, 0));
+        boolean valid = price.isValidFor(LocalDate.of(2024, 2, 1));
 
         assertThat(valid).isFalse();
     }
@@ -50,13 +50,13 @@ class PriceTest {
     void overlaps_shouldReturnTrueWhenRangesOverlap() {
         Price price1 = new Price(new PriceId(1L), new ProductId(1L),
                 new Money(BigDecimal.TEN, new Currency("EUR")),
-                new DateRange(LocalDateTime.of(2024, 1, 1, 0, 0),
-                        LocalDateTime.of(2024, 6, 30, 23, 59)));
+                new DateRange(LocalDate.of(2024, 1, 1),
+                        LocalDate.of(2024, 6, 30)));
 
         Price price2 = new Price(new PriceId(2L), new ProductId(1L),
                 new Money(BigDecimal.ONE, new Currency("EUR")),
-                new DateRange(LocalDateTime.of(2024, 6, 1, 0, 0),
-                        LocalDateTime.of(2024, 12, 31, 23, 59)));
+                new DateRange(LocalDate.of(2024, 6, 1),
+                        LocalDate.of(2024, 12, 31)));
 
         assertThat(price1.overlaps(price2)).isTrue();
     }
@@ -66,13 +66,13 @@ class PriceTest {
     void overlaps_shouldReturnFalseWhenRangesDoNotOverlap() {
         Price price1 = new Price(new PriceId(1L), new ProductId(1L),
                 new Money(BigDecimal.TEN, new Currency("EUR")),
-                new DateRange(LocalDateTime.of(2024, 1, 1, 0, 0),
-                        LocalDateTime.of(2024, 3, 31, 23, 59)));
+                new DateRange(LocalDate.of(2024, 1, 1),
+                        LocalDate.of(2024, 3, 31)));
 
         Price price2 = new Price(new PriceId(2L), new ProductId(1L),
                 new Money(BigDecimal.ONE, new Currency("EUR")),
-                new DateRange(LocalDateTime.of(2024, 4, 1, 0, 0),
-                        LocalDateTime.of(2024, 6, 30, 23, 59)));
+                new DateRange(LocalDate.of(2024, 4, 1),
+                        LocalDate.of(2024, 6, 30)));
 
         assertThat(price1.overlaps(price2)).isFalse();
     }
@@ -84,8 +84,8 @@ class PriceTest {
         ProductId productId = new ProductId(100L);
         Money money = new Money(BigDecimal.valueOf(99.99), new Currency("USD"));
         DateRange range = new DateRange(
-                LocalDateTime.of(2024, 1, 1, 0, 0),
-                LocalDateTime.of(2024, 12, 31, 23, 59)
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 12, 31)
         );
 
         Price price = new Price(priceId, productId, money, range);
