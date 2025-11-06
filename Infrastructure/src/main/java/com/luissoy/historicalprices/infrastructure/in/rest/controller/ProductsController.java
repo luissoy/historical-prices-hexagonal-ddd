@@ -1,13 +1,9 @@
 package com.luissoy.historicalprices.infrastructure.in.rest.controller;
 
 import com.luissoy.historicalprices.api.ProductsApi;
-import com.luissoy.historicalprices.api.model.ProductRequest;
-import com.luissoy.historicalprices.api.model.ProductResponse;
-import com.luissoy.historicalprices.api.model.ProductWithPricesResponse;
-import com.luissoy.historicalprices.api.model.PriceRequest;
-import com.luissoy.historicalprices.api.model.PriceResponse;
+import com.luissoy.historicalprices.api.model.*;
 import com.luissoy.historicalprices.application.price.dto.PriceCommand;
-import com.luissoy.historicalprices.application.price.dto.PriceHistoryResponse;
+import com.luissoy.historicalprices.application.price.dto.PriceHistoryResult;
 import com.luissoy.historicalprices.application.price.dto.PriceResult;
 import com.luissoy.historicalprices.application.price.port.in.PriceUseCase;
 import com.luissoy.historicalprices.application.product.dto.ProductCommand;
@@ -19,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api")
@@ -60,15 +56,15 @@ public class ProductsController implements ProductsApi {
 
     @Override
     public ResponseEntity<ProductWithPricesResponse> getProductPriceHistory(Long productId) {
-        PriceHistoryResponse priceHistoryResponse = priceService.getPriceHistory(productId);
-        ProductWithPricesResponse response = priceApiMapper.toProductWithPricesResponse(priceHistoryResponse);
+        PriceHistoryResult priceHistoryResult = priceService.getPriceHistory(productId);
+        ProductWithPricesResponse response = priceApiMapper.toProductWithPricesResponse(priceHistoryResult);
         return ResponseEntity.ok(response);
     }
 
     @Override
-    public ResponseEntity<PriceResponse> getCurrentPrice(Long productId, OffsetDateTime date) {
-        PriceResult result = priceService.getActivePrice(productId, date.toLocalDateTime());
-        PriceResponse response = priceApiMapper.toPriceResponse(result);
+    public ResponseEntity<CurrentPriceResponse> getCurrentPrice(Long productId, LocalDate date) {
+        PriceResult result = priceService.getActivePrice(productId, date);
+        CurrentPriceResponse response = priceApiMapper.toCurrentPriceResponse(result);
         return ResponseEntity.ok(response);
     }
 }
