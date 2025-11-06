@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: >
     REST API for managing products and their historical prices.
-    API-first definition (date-times, currency codes, longs for ids).
+    API-first definition (date, currency codes, longs for ids).
 servers:
   - url: http://localhost:8080/api
     description: Local
@@ -89,7 +89,7 @@ paths:
   /products/{productId}/prices/current:
     get:
       tags: [Products]
-      summary: Get the current or applicable price for a given date-time
+      summary: Get the current or applicable price for a given date
       operationId: getCurrentPrice
       parameters:
         - name: productId
@@ -103,15 +103,15 @@ paths:
           required: true
           schema:
             type: string
-            format: date-time
-            example: "2024-04-15T10:00:00"
+            format: date
+            example: "2024-04-15"
       responses:
         '200':
           description: Current price retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PriceResponse'
+                $ref: '#/components/schemas/CurrentPriceResponse'
         '404':
           description: No active price found for the given date or product
 
@@ -154,12 +154,12 @@ components:
           pattern: "^[A-Z]{3}$"
         initDate:
           type: string
-          format: date-time
-          example: "2024-01-01T00:00:00"
+          format: date
+          example: "2000-01-22"
         endDate:
           type: string
-          format: date-time
-          example: "2024-06-30T23:59:59"
+          format: date
+          example: "2000-01-23"
       required:
         - value
         - currency
@@ -183,10 +183,10 @@ components:
           pattern: "^[A-Z]{3}$"
         initDate:
           type: string
-          format: date-time
+          format: date
         endDate:
           type: string
-          format: date-time
+          format: date
 
     ProductWithPricesResponse:
       type: object
@@ -202,3 +202,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PriceResponse'
+
+    CurrentPriceResponse:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        currency:
+          type: string
+          pattern: "^[A-Z]{3}$"
