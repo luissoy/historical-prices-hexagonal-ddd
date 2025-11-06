@@ -2,9 +2,9 @@ package com.luissoy.historicalprices.domain.shared.valueobject;
 
 import com.luissoy.historicalprices.domain.shared.exception.ValidationException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-public record DateRange(LocalDateTime start, LocalDateTime end) {
+public record DateRange(LocalDate start, LocalDate end) {
 
     public DateRange {
         if (start == null)
@@ -13,7 +13,7 @@ public record DateRange(LocalDateTime start, LocalDateTime end) {
             throw new ValidationException("End date must be after start date");
     }
 
-    public boolean includes(LocalDateTime date) {
+    public boolean includes(LocalDate date) {
         if (date == null) return false;
         if (end == null) return !date.isBefore(start);
         return !date.isBefore(start) && !date.isAfter(end);
@@ -22,9 +22,9 @@ public record DateRange(LocalDateTime start, LocalDateTime end) {
     public boolean overlaps(DateRange other) {
         if (other == null) return false;
 
-        LocalDateTime thisEnd = this.end == null ? LocalDateTime.MAX : this.end;
-        LocalDateTime otherEnd = other.end == null ? LocalDateTime.MAX : other.end;
+        LocalDate thisEnd = this.end == null ? LocalDate.MAX : this.end;
+        LocalDate otherEnd = other.end == null ? LocalDate.MAX : other.end;
 
-        return this.start.isBefore(otherEnd) && other.start.isBefore(thisEnd);
+        return !(thisEnd.isBefore(other.start) || otherEnd.isBefore(this.start));
     }
 }

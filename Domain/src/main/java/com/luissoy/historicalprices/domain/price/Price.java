@@ -5,7 +5,7 @@ import com.luissoy.historicalprices.domain.product.valueobject.ProductId;
 import com.luissoy.historicalprices.domain.shared.valueobject.DateRange;
 import com.luissoy.historicalprices.domain.shared.valueobject.Money;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Price {
     private final PriceId id;
@@ -20,7 +20,7 @@ public class Price {
         this.dateRange = dateRange;
     }
 
-    public boolean isValidFor(LocalDateTime date) {
+    public boolean isValidFor(LocalDate date) {
         return dateRange.includes(date);
     }
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,8 +24,8 @@ class PriceFactoryTest {
         ProductId productId = new ProductId(100L);
         Money value = new Money(BigDecimal.valueOf(10.99), new Currency("EUR"));
         DateRange dateRange = new DateRange(
-                LocalDateTime.of(2024, 1, 1, 0, 0),
-                LocalDateTime.of(2024, 2, 1, 0, 0)
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 2, 1)
         );
 
         List<Price> existingPrices = List.of();
@@ -50,14 +50,14 @@ class PriceFactoryTest {
                 productId,
                 value,
                 new DateRange(
-                        LocalDateTime.of(2024, 1, 1, 0, 0),
-                        LocalDateTime.of(2024, 2, 1, 0, 0)
+                        LocalDate.of(2024, 1, 1),
+                        LocalDate.of(2024, 2, 1)
                 )
         );
 
         DateRange overlappingRange = new DateRange(
-                LocalDateTime.of(2024, 1, 15, 0, 0),
-                LocalDateTime.of(2024, 3, 1, 0, 0)
+                LocalDate.of(2024, 1, 15),
+                LocalDate.of(2024, 3, 1)
         );
 
         assertThrows(
@@ -83,14 +83,14 @@ class PriceFactoryTest {
                 productId,
                 value,
                 new DateRange(
-                        LocalDateTime.of(2024, 1, 1, 0, 0),
-                        LocalDateTime.of(2024, 2, 1, 0, 0)
+                        LocalDate.of(2024, 1, 1),
+                        LocalDate.of(2024, 2, 1)
                 )
         );
 
         DateRange newRange = new DateRange(
-                LocalDateTime.of(2024, 2, 1, 0, 1),
-                LocalDateTime.of(2024, 3, 1, 0, 0)
+                LocalDate.of(2024, 2, 2),
+                LocalDate.of(2024, 3, 1)
         );
 
         Price newPrice = PriceFactory.createPrice(
