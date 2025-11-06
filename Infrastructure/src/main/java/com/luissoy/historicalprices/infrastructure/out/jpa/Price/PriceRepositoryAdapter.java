@@ -6,6 +6,7 @@ import com.luissoy.historicalprices.domain.price.valueobject.PriceId;
 import com.luissoy.historicalprices.domain.product.valueobject.ProductId;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class PriceRepositoryAdapter implements PriceRepository {
     }
 
     @Override
-    public Optional<Price> findByProductIdAndDate(ProductId id, LocalDateTime date) {
+    public Optional<Price> findByProductIdAndDate(ProductId id, LocalDate date) {
         return jpa.findByProductIdAndDate(id.getValue(), date)
                 .map(mapper::toDomain);
     }

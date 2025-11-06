@@ -2,7 +2,7 @@ package com.luissoy.historicalprices.infrastructure.out.jpa.Price;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "PRICES")
@@ -15,8 +15,8 @@ public class PriceEntity {
     @Column(name = "price_value")
     private BigDecimal value;
     private String currencyCode;
-    private LocalDateTime initDate;
-    private LocalDateTime endDate;
+    private LocalDate initDate;
+    private LocalDate endDate;
     private Long productId;
 
     public PriceEntity() {}
@@ -25,8 +25,8 @@ public class PriceEntity {
             Long id,
             BigDecimal value,
             String currencyCode,
-            LocalDateTime initDate,
-            LocalDateTime endDate,
+            LocalDate initDate,
+            LocalDate endDate,
             Long productId
     ) {
         this.id = id;
@@ -63,19 +63,19 @@ public class PriceEntity {
         this.currencyCode = currencyCode;
     }
 
-    public LocalDateTime getInitDate() {
+    public LocalDate getInitDate() {
         return initDate;
     }
 
-    public void setInitDate(LocalDateTime startDate) {
+    public void setInitDate(LocalDate startDate) {
         this.initDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
