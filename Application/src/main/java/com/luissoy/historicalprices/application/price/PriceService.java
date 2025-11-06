@@ -3,7 +3,7 @@ package com.luissoy.historicalprices.application.price;
 import com.luissoy.historicalprices.application.price.mapper.PriceMapper;
 import com.luissoy.historicalprices.application.price.port.in.PriceUseCase;
 import com.luissoy.historicalprices.application.price.dto.PriceCommand;
-import com.luissoy.historicalprices.application.price.dto.PriceHistoryResponse;
+import com.luissoy.historicalprices.application.price.dto.PriceHistoryResult;
 import com.luissoy.historicalprices.application.price.dto.PriceResult;
 import com.luissoy.historicalprices.domain.price.Price;
 import com.luissoy.historicalprices.domain.price.PriceFactory;
@@ -17,7 +17,7 @@ import com.luissoy.historicalprices.domain.shared.valueobject.Currency;
 import com.luissoy.historicalprices.domain.shared.valueobject.DateRange;
 import com.luissoy.historicalprices.domain.shared.valueobject.Money;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,7 +64,7 @@ public final class PriceService implements PriceUseCase {
     }
 
     @Override
-    public PriceResult getActivePrice(Long productIdLong, LocalDateTime applicationDate) {
+    public PriceResult getActivePrice(Long productIdLong, LocalDate applicationDate) {
         ProductId productId = new ProductId(productIdLong);
 
         Optional<Price> price = priceRepository.findByProductIdAndDate(productId, applicationDate);
@@ -76,7 +76,7 @@ public final class PriceService implements PriceUseCase {
     }
 
     @Override
-    public PriceHistoryResponse getPriceHistory(Long productIdLong) {
+    public PriceHistoryResult getPriceHistory(Long productIdLong) {
         ProductId productId = new ProductId(productIdLong);
 
         Product product = productRepository.findById(productId)
@@ -88,11 +88,6 @@ public final class PriceService implements PriceUseCase {
                 .map(priceMapper::toDto)
                 .collect(Collectors.toList());
 
-        return new PriceHistoryResponse(
-                product.id().getValue(),
-                product.name().value(),
-                product.description().value(),
-                dtos
-        );
+        return priceMapper.toPriceHistoryDto(product, dtos);
     }
 }

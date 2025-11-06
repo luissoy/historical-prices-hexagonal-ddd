@@ -2,7 +2,7 @@ package com.luissoy.historicalprices.application.price;
 
 import com.luissoy.historicalprices.application.price.mapper.PriceMapper;
 import com.luissoy.historicalprices.application.price.dto.PriceCommand;
-import com.luissoy.historicalprices.application.price.dto.PriceHistoryResponse;
+import com.luissoy.historicalprices.application.price.dto.PriceHistoryResult;
 import com.luissoy.historicalprices.application.price.dto.PriceResult;
 import com.luissoy.historicalprices.domain.price.Price;
 import com.luissoy.historicalprices.domain.price.PriceFactory;
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,8 +56,8 @@ class PriceServiceTest {
         PriceCommand command = new PriceCommand(
                 BigDecimal.valueOf(10.5),
                 "EUR",
-                LocalDateTime.of(2024, 1, 1, 0, 0),
-                LocalDateTime.of(2024, 12, 31, 0, 0)
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 12, 31)
         );
 
         when(productRepository.findById(any(ProductId.class))).thenReturn(Optional.of(product));
@@ -85,8 +85,8 @@ class PriceServiceTest {
         PriceCommand command = new PriceCommand(
                 BigDecimal.valueOf(10),
                 "EUR",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1)
+                LocalDate.now(),
+                LocalDate.now().plusDays(1)
         );
 
         assertThrows(ProductNotFoundException.class, () -> priceService.addPrice(1L, command));
@@ -101,7 +101,7 @@ class PriceServiceTest {
                 new PriceId(1L),
                 productId,
                 new Money(BigDecimal.valueOf(20), new Currency("EUR")),
-                new DateRange(LocalDateTime.now().minusDays(5), LocalDateTime.now().plusDays(5)),
+                new DateRange(LocalDate.now().minusDays(5), LocalDate.now().plusDays(5)),
                 List.of()
         );
 
@@ -110,7 +110,7 @@ class PriceServiceTest {
                 new PriceResult(1L, 1L, BigDecimal.valueOf(20), "EUR", price.dateRange().start(), price.dateRange().end())
         );
 
-        PriceResult response = priceService.getActivePrice(1L, LocalDateTime.now());
+        PriceResult response = priceService.getActivePrice(1L, LocalDate.now());
 
         assertThat(response).isNotNull();
         assertThat(response.value()).isEqualTo(BigDecimal.valueOf(20));
@@ -122,7 +122,7 @@ class PriceServiceTest {
         ProductId productId = new ProductId(1L);
         when(priceRepository.findByProductIdAndDate(eq(productId), any())).thenReturn(Optional.empty());
 
-        assertThrows(PriceNotFoundException.class, () -> priceService.getActivePrice(1L, LocalDateTime.now()));
+        assertThrows(PriceNotFoundException.class, () -> priceService.getActivePrice(1L, LocalDate.now()));
     }
 
     @Test
@@ -133,7 +133,7 @@ class PriceServiceTest {
                 new PriceId(1L),
                 productId,
                 new Money(BigDecimal.TEN, new Currency("EUR")),
-                new DateRange(LocalDateTime.now().minusDays(10), LocalDateTime.now().minusDays(5)),
+                new DateRange(LocalDate.now().minusDays(10), LocalDate.now().minusDays(5)),
                 List.of()
         );
         List<Price> prices = List.of(
@@ -147,8 +147,13 @@ class PriceServiceTest {
         when(priceMapper.toDto(any())).thenReturn(
                 new PriceResult(1L, 1L, BigDecimal.TEN, "EUR", prices.get(0).dateRange().start(), prices.get(0).dateRange().end())
         );
+        when(priceMapper.toPriceHistoryDto(any(), any())).thenReturn(
+                new PriceHistoryResult(1L, "Test", "Desc", List.of(
+                        new PriceResult(1L, 1L, BigDecimal.TEN, "EUR", prices.get(0).dateRange().start(), prices.get(0).dateRange().end())
+                ))
+        );
 
-        PriceHistoryResponse response = priceService.getPriceHistory(1L);
+        PriceHistoryResult response = priceService.getPriceHistory(1L);
 
         assertThat(response).isNotNull();
         assertThat(response.prices()).hasSize(1);
