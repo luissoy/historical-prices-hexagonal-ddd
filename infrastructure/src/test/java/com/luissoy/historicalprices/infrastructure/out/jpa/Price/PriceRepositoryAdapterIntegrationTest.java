@@ -61,7 +61,7 @@ class PriceRepositoryAdapterIntegrationTest {
         List<Price> prices = adapter.findByProductId(new ProductId(price.getProductId()));
 
         assertThat(prices).hasSize(1);
-        assertThat(prices.get(0).productId().getValue()).isEqualTo(price.getProductId());
+        assertThat(prices.getFirst().productId().getValue()).isEqualTo(price.getProductId());
     }
 
     @Test
