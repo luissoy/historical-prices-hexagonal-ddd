@@ -1,5 +1,7 @@
-package com.luissoy.historicalprices.domain.shared.valueobject;
+package com.luissoy.historicalprices.domain.price.valueobject;
 
+import com.luissoy.historicalprices.domain.price.valueobject.Currency;
+import com.luissoy.historicalprices.domain.price.valueobject.Money;
 import com.luissoy.historicalprices.domain.shared.exception.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
