@@ -1,4 +1,4 @@
-package com.luissoy.historicalprices.infrastructure.out.jpa.Product;
+package com.luissoy.historicalprices.infrastructure.out.persistence.product;
 
 import com.luissoy.historicalprices.domain.product.Product;
 import com.luissoy.historicalprices.domain.product.valueobject.ProductDescription;
@@ -29,9 +29,9 @@ class ProductEntityMapperTest {
         ProductEntity entity = mapper.toEntity(product);
 
         assertThat(entity).isNotNull();
-        assertThat(entity.getId()).isEqualTo(1L);
-        assertThat(entity.getName()).isEqualTo("Test Product");
-        assertThat(entity.getDescription()).isEqualTo("A product used for testing");
+        assertThat(entity.id()).isEqualTo(1L);
+        assertThat(entity.name()).isEqualTo("Test Product");
+        assertThat(entity.description()).isEqualTo("A product used for testing");
     }
 
     @Test
