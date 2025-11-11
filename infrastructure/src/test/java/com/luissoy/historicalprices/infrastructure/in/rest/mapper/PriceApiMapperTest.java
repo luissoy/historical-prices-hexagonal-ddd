@@ -3,9 +3,9 @@ package com.luissoy.historicalprices.infrastructure.in.rest.mapper;
 import com.luissoy.historicalprices.api.model.PriceRequest;
 import com.luissoy.historicalprices.api.model.PriceResponse;
 import com.luissoy.historicalprices.api.model.ProductWithPricesResponse;
-import com.luissoy.historicalprices.application.price.dto.PriceCommand;
-import com.luissoy.historicalprices.application.price.dto.PriceHistoryResult;
+import com.luissoy.historicalprices.application.price.dto.AddPriceCommand;
 import com.luissoy.historicalprices.application.price.dto.PriceResult;
+import com.luissoy.historicalprices.application.product.dto.ProductResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +32,7 @@ class PriceApiMapperTest {
         request.setInitDate(LocalDate.of(2024, 5, 1));
         request.setEndDate(LocalDate.of(2024, 6, 1));
 
-        PriceCommand command = mapper.toPriceCommand(request);
+        AddPriceCommand command = mapper.toPriceCommand(1L, request);
 
         assertThat(command.value()).isEqualByComparingTo(BigDecimal.valueOf(45.5));
         assertThat(command.currencyCode()).isEqualTo("EUR");
@@ -63,19 +63,24 @@ class PriceApiMapperTest {
 
     @Test
     void toProductWithPricesResponse_shouldMapPriceHistoryCorrectly() {
-        PriceResult price1 = new PriceResult(1L, 10L, BigDecimal.TEN, "EUR",
+        PriceResult price1 = new PriceResult(
+                1L, 10L, BigDecimal.TEN, "EUR",
                 LocalDate.of(2024, 1, 1),
-                LocalDate.of(2024, 2, 1));
-
-        PriceResult price2 = new PriceResult(2L, 10L, BigDecimal.valueOf(20), "EUR",
+                LocalDate.of(2024, 2, 1)
+        );
+        PriceResult price2 = new PriceResult(
+                2L, 10L, BigDecimal.valueOf(20), "EUR",
                 LocalDate.of(2024, 2, 1),
-                LocalDate.of(2024, 3, 1));
-
-        PriceHistoryResult history = new PriceHistoryResult(
-                10L, "ProductX", "Test description", List.of(price1, price2)
+                LocalDate.of(2024, 3, 1)
         );
 
-        ProductWithPricesResponse response = mapper.toProductWithPricesResponse(history);
+        ProductResult product = new ProductResult(
+                10L,
+                "ProductX",
+                "Test description"
+        );
+
+        ProductWithPricesResponse response = mapper.toProductWithPricesResponse(product, List.of(price1, price2));
 
         assertThat(response.getId()).isEqualTo(10L);
         assertThat(response.getName()).isEqualTo("ProductX");
@@ -93,7 +98,7 @@ class PriceApiMapperTest {
         request.setInitDate(LocalDate.of(2024, 5, 1));
         request.setEndDate(null);
 
-        PriceCommand command = mapper.toPriceCommand(request);
+        AddPriceCommand command = mapper.toPriceCommand(1L, request);
 
         assertThat(command.endDate()).isNull();
     }
@@ -109,5 +114,4 @@ class PriceApiMapperTest {
         assertThat(response.getInitDate()).isNull();
         assertThat(response.getEndDate()).isNull();
     }
-
 }

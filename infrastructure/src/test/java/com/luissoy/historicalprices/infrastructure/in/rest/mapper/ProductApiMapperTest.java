@@ -2,7 +2,7 @@ package com.luissoy.historicalprices.infrastructure.in.rest.mapper;
 
 import com.luissoy.historicalprices.api.model.ProductRequest;
 import com.luissoy.historicalprices.api.model.ProductResponse;
-import com.luissoy.historicalprices.application.product.dto.ProductCommand;
+import com.luissoy.historicalprices.application.product.dto.CreateProductCommand;
 import com.luissoy.historicalprices.application.product.dto.ProductResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class ProductApiMapperTest {
         request.setName("Keyboard");
         request.setDescription("Mechanical keyboard");
 
-        ProductCommand command = mapper.toProductCommand(request);
+        CreateProductCommand command = mapper.toProductCommand(request);
 
         assertThat(command.name()).isEqualTo("Keyboard");
         assertThat(command.description()).isEqualTo("Mechanical keyboard");
