@@ -88,7 +88,7 @@ class ProductTest {
         List<Price> snapshot = product.prices();
 
         assertThat(snapshot).hasSize(1);
-        assertThatThrownBy(() -> snapshot.add(snapshot.get(0))).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> snapshot.add(snapshot.getFirst())).isInstanceOf(UnsupportedOperationException.class);
 
         assertThat(product.prices()).hasSize(1);
     }
