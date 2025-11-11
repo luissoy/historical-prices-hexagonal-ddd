@@ -2,8 +2,8 @@ package com.luissoy.historicalprices.domain.price;
 
 import com.luissoy.historicalprices.domain.price.valueobject.PriceId;
 import com.luissoy.historicalprices.domain.product.valueobject.ProductId;
-import com.luissoy.historicalprices.domain.shared.valueobject.DateRange;
-import com.luissoy.historicalprices.domain.shared.valueobject.Money;
+import com.luissoy.historicalprices.domain.price.valueobject.DateRange;
+import com.luissoy.historicalprices.domain.price.valueobject.Money;
 
 import java.time.LocalDate;
 
@@ -13,7 +13,7 @@ public class Price {
     private final Money value;
     private final DateRange dateRange;
 
-    Price(PriceId id, ProductId productId, Money value, DateRange dateRange) {
+    public Price(PriceId id, ProductId productId, Money value, DateRange dateRange) {
         this.id = id;
         this.productId = productId;
         this.value = value;

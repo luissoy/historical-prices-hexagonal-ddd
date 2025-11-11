@@ -1,4 +1,4 @@
-package com.luissoy.historicalprices.domain.shared.valueobject;
+package com.luissoy.historicalprices.domain.price.valueobject;
 
 import com.luissoy.historicalprices.domain.shared.exception.ValidationException;
 
