@@ -2,9 +2,9 @@ package com.luissoy.historicalprices.domain.price;
 
 import com.luissoy.historicalprices.domain.price.valueobject.PriceId;
 import com.luissoy.historicalprices.domain.product.valueobject.ProductId;
-import com.luissoy.historicalprices.domain.shared.valueobject.Currency;
-import com.luissoy.historicalprices.domain.shared.valueobject.DateRange;
-import com.luissoy.historicalprices.domain.shared.valueobject.Money;
+import com.luissoy.historicalprices.domain.price.valueobject.Currency;
+import com.luissoy.historicalprices.domain.price.valueobject.DateRange;
+import com.luissoy.historicalprices.domain.price.valueobject.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
