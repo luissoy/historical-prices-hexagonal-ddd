@@ -4,17 +4,19 @@ import com.luissoy.historicalprices.api.model.CurrentPriceResponse;
 import com.luissoy.historicalprices.api.model.PriceRequest;
 import com.luissoy.historicalprices.api.model.PriceResponse;
 import com.luissoy.historicalprices.api.model.ProductWithPricesResponse;
-import com.luissoy.historicalprices.application.price.dto.PriceCommand;
-import com.luissoy.historicalprices.application.price.dto.PriceHistoryResult;
+import com.luissoy.historicalprices.application.price.dto.AddPriceCommand;
 import com.luissoy.historicalprices.application.price.dto.PriceResult;
+import com.luissoy.historicalprices.application.product.dto.ProductResult;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Component
 public class PriceApiMapper {
-    public PriceCommand toPriceCommand(PriceRequest priceRequest) {
-        return new PriceCommand(
+    public AddPriceCommand toPriceCommand(Long productId, PriceRequest priceRequest) {
+        return new AddPriceCommand(
+                productId,
                 priceRequest.getValue() == null ? null : BigDecimal.valueOf(priceRequest.getValue()),
                 priceRequest.getCurrency(),
                 priceRequest.getInitDate(),
@@ -33,13 +35,13 @@ public class PriceApiMapper {
         return priceResponse;
     }
 
-    public ProductWithPricesResponse toProductWithPricesResponse(PriceHistoryResult priceHistoryResult) {
+    public ProductWithPricesResponse toProductWithPricesResponse(ProductResult productResult, List<PriceResult> priceResults) {
         ProductWithPricesResponse response = new ProductWithPricesResponse();
-        response.setId(priceHistoryResult.productId());
-        response.setName(priceHistoryResult.productName());
-        response.setDescription(priceHistoryResult.description());
+        response.setId(productResult.id());
+        response.setName(productResult.name());
+        response.setDescription(productResult.description());
 
-        for (PriceResult priceResult : priceHistoryResult.prices()) {
+        for (PriceResult priceResult : priceResults) {
             PriceResponse priceResponse = toPriceResponse(priceResult);
             response.getPrices().add(priceResponse);
         }
