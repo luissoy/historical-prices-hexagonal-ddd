@@ -8,12 +8,12 @@ import com.luissoy.historicalprices.domain.product.valueobject.ProductId;
 
 import java.util.List;
 
-public class GetPriceHistoryUseCase {
+public class GetProductPriceHistoryUseCase {
 
     private final ProductRepository productRepository;
     private final PriceMapper priceMapper;
 
-    public GetPriceHistoryUseCase(ProductRepository productRepository, PriceMapper priceMapper) {
+    public GetProductPriceHistoryUseCase(ProductRepository productRepository, PriceMapper priceMapper) {
         this.productRepository = productRepository;
         this.priceMapper = priceMapper;
     }

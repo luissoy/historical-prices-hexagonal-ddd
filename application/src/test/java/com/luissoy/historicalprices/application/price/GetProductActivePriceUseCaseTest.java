@@ -17,17 +17,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
-class GetActivePriceUseCaseTest {
+class GetProductActivePriceUseCaseTest {
 
     private PriceRepository priceRepository;
     private PriceMapper priceMapper;
-    private GetActivePriceUseCase useCase;
+    private GetProductActivePriceUseCase useCase;
 
     @BeforeEach
     void setUp() {
         priceRepository = mock(PriceRepository.class);
         priceMapper = mock(PriceMapper.class);
-        useCase = new GetActivePriceUseCase(priceRepository, priceMapper);
+        useCase = new GetProductActivePriceUseCase(priceRepository, priceMapper);
     }
 
     @Test

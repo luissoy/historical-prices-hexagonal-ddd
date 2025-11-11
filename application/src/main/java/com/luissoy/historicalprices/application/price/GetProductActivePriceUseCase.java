@@ -6,12 +6,12 @@ import com.luissoy.historicalprices.domain.price.PriceRepository;
 import com.luissoy.historicalprices.domain.price.exception.PriceNotFoundException;
 import com.luissoy.historicalprices.domain.product.valueobject.ProductId;
 
-public class GetActivePriceUseCase {
+public class GetProductActivePriceUseCase {
 
     private final PriceRepository priceRepository;
     private final PriceMapper priceMapper;
 
-    public GetActivePriceUseCase(PriceRepository priceRepository, PriceMapper priceMapper) {
+    public GetProductActivePriceUseCase(PriceRepository priceRepository, PriceMapper priceMapper) {
         this.priceRepository = priceRepository;
         this.priceMapper = priceMapper;
     }

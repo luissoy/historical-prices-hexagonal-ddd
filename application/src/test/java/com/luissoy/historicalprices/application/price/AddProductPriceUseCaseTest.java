@@ -3,6 +3,7 @@ package com.luissoy.historicalprices.application.price;
 import com.luissoy.historicalprices.application.price.dto.AddPriceCommand;
 import com.luissoy.historicalprices.application.price.dto.PriceResult;
 import com.luissoy.historicalprices.domain.price.Price;
+import com.luissoy.historicalprices.domain.price.valueobject.DateRange;
 import com.luissoy.historicalprices.domain.product.Product;
 import com.luissoy.historicalprices.domain.product.ProductRepository;
 import com.luissoy.historicalprices.domain.product.exception.ProductNotFoundException;
@@ -20,18 +21,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
-class AddPriceUseCaseTest {
+class AddProductPriceUseCaseTest {
 
     ProductRepository productRepository;
     PriceMapper priceMapper;
-    AddPriceUseCase useCase;
+    AddProductPriceUseCase useCase;
 
 
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
         priceMapper = mock(PriceMapper.class);
-        useCase = new AddPriceUseCase(productRepository, priceMapper);
+        useCase = new AddProductPriceUseCase(productRepository, priceMapper);
     }
 
 
@@ -57,12 +58,21 @@ class AddPriceUseCaseTest {
         Product product = mock(Product.class);
         Product savedProduct = mock(Product.class);
         Price lastPrice = mock(Price.class);
+
+        DateRange dateRange = new DateRange(
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 12, 31)
+        );
+
         List<Price> prices = new LinkedList<>();
         prices.add(lastPrice);
 
         when(productRepository.findById(new ProductId(1L))).thenReturn(Optional.of(product));
         when(productRepository.save(product)).thenReturn(savedProduct);
         when(savedProduct.prices()).thenReturn(prices);
+
+        when(lastPrice.dateRange()).thenReturn(dateRange);
+
         when(priceMapper.toPriceResult(lastPrice)).thenReturn(expectedResult);
 
         PriceResult result = useCase.execute(command);
@@ -73,6 +83,7 @@ class AddPriceUseCaseTest {
         verify(productRepository).save(product);
         verify(priceMapper).toPriceResult(lastPrice);
     }
+
 
     @Test
     void execute_should_throw_exception_when_product_not_found() {
