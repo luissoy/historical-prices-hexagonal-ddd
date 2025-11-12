@@ -1,6 +1,3 @@
-# ===========================
-# 1️⃣ Build Stage
-# ===========================
 FROM eclipse-temurin:21-jdk-alpine AS build
 
 WORKDIR /app
@@ -8,27 +5,18 @@ WORKDIR /app
 COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
-RUN chmod +x mvnw
-
-COPY domain/ domain/
-COPY application/ application/
-COPY api/ api/
-COPY infrastructure/ infrastructure/
 
 RUN ./mvnw dependency:go-offline -B
 
-RUN ./mvnw clean package -pl api -am -DskipTests
+COPY src ./src
 
-RUN ./mvnw clean package -pl infrastructure -am -DskipTests
+RUN ./mvnw clean package -DskipTests
 
-# ===========================
-# Execution Stage
-# ===========================
 FROM eclipse-temurin:21-jre-alpine
 
-WORKDIR /App
+WORKDIR /app
 
-COPY --from=build /app/infrastructure/target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
