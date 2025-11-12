@@ -80,7 +80,7 @@ class ProductsControllerIntegrationTest {
         String applicationDate = "2024-06-15";
 
         mockMvc.perform(get("/api/products/{productId}/prices/current", 1)
-                        .param("date", applicationDate.toString()))
+                        .param("date", applicationDate))
                 .andExpect(status().isOk());
     }
 }
