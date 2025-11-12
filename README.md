@@ -12,7 +12,7 @@ The API allows you to:
 - Retrieve the active price on a specific date
 - Retrieve the full price history of a product
 
-This project is structured as a **multi-module Maven application** using a **hexagonal architecture** (domain-driven, with clear separation between business logic and infrastructure).
+This project is structured as a **single-module Maven application** using a **hexagonal architecture** (domain-driven, with clear separation between business logic and infrastructure).
 
 ---
 
@@ -39,32 +39,47 @@ This project is structured as a **multi-module Maven application** using a **hex
 
 ## 📂 File Structure
 
+The project follows the Tomato Architecture that is a pragmatic approach to software architecture following the Core Principles.
 ```      
-│ pom.xml
-│ docker-compose.yml
-│ Dockerfile
-│ README.md
-│ Historical Prices API.postman_collection.json
-│
-├── api
-│ └── src/main/resources/openapi.yaml # OpenAPI specification
-│
-├── application
-│ ├── price/
-│ ├── product/
-│ └── dto/
-│
-├── domain
-│ ├── price/
-│ ├── product/
-│ └── shared/
-│
-└── infrastructure
-├── in/rest/controller/
-├── out/persistence/
-├── config/
-├── resources/
-└── HistoricalPricesApplication.java # Primary Spring Boot application class
+src/
+├── main/
+│   ├── java/com/luissoy/historicalprices/
+│   │   ├── HistoricalPricesApplication.java
+│   │  
+│   │   ├── price/
+│   │   │   ├── application/
+│   │   │   │   ├── AddProductPriceUseCase.java
+│   │   │   │   ├── GetProductActivePriceUseCase.java
+│   │   │   │   └── GetProductPriceHistoryUseCase.java
+│   │   │   ├── domain/
+│   │   │   │   ├── Price.java
+│   │   │   │   └── PriceRepository.java
+│   │   │   └── infrastructure/
+│   │   │       └── persistance/
+│   │   │           └── PriceRepositoryAdapter.java
+│   │   │
+│   │   ├── product/
+│   │   │   ├── application/
+│   │   │   │   ├── CreateProductUseCase.java
+│   │   │   │   └── GetProductUseCase.java
+│   │   │   ├── domain/
+│   │   │   │   ├── Product.java
+│   │   │   │   └── ProductRepository.java
+│   │   │   └── infrastructure/
+│   │   │       └── persistance/
+│   │   │           └── ProductRepositoryAdapter.java
+│   │   │
+│   │   └── shared/
+│   │       ├── domain/
+│   │       │   └── exception/DomainException.java
+│   │       └── infrastructure/
+│   │           └── rest/ExceptionHandlerController.java
+│   │
+│   └── resources/
+│       ├── application.properties
+│       ├── schema.sql
+│       ├── data.sql
+│       └── openapi.yaml
 ```
 
 ---
@@ -164,16 +179,15 @@ This project is structured as a **multi-module Maven application** using a **hex
 
 At the project root:
 ```bash
-mvnw clean package -pl api -am -DskipTests
-mvnw clean package -pl infrastructure -am -DskipTests
+mvnw clean package -DskipTests
 ```
-This builds all modules and produces the executable JAR inside:
-- `infrastructure/target/infrastructure-X.X.X.jar`
+This builds the single executable JAR inside:
+- `target/historicalprices-X.X.X.jar`
 
 ### ▶️ Running Locally
 After building:
 ```bash
-java -jar infrastructure/target/historicalprices.infrastructure-X.X.X.jar
+java -jar target/historicalprices-X.X.X.jar
 ```
 Swagger UI will be available at: `http://localhost:8080/api/swagger`
 
