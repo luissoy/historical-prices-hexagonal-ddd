@@ -1,6 +1,6 @@
-package com.luissoy.historicalprices.domain.shared.valueobject;
+package com.luissoy.historicalprices.shared.domain.valueobject;
 
-import com.luissoy.historicalprices.domain.shared.exception.ValidationException;
+import com.luissoy.historicalprices.shared.domain.exception.ValidationException;
 
 import java.util.Objects;
 

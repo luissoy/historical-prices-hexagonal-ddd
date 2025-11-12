@@ -1,4 +1,4 @@
-package com.luissoy.historicalprices.infrastructure.in.rest.controller;
+package com.luissoy.historicalprices.shared.infrastructure.rest;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;

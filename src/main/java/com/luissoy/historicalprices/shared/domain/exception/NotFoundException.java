@@ -1,4 +1,4 @@
-package com.luissoy.historicalprices.domain.shared.exception;
+package com.luissoy.historicalprices.shared.domain.exception;
 
 public class NotFoundException extends DomainException {
     public NotFoundException(String message) {

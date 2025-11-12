@@ -1,9 +1,11 @@
-package com.luissoy.historicalprices.infrastructure.in.rest.exception;
+package com.luissoy.historicalprices.shared.infrastructure;
 
-import com.luissoy.historicalprices.domain.price.exception.OverlappingPriceException;
-import com.luissoy.historicalprices.domain.product.exception.InvalidProductNameException;
-import com.luissoy.historicalprices.domain.product.exception.ProductNotFoundException;
-import com.luissoy.historicalprices.domain.product.valueobject.ProductId;
+import com.luissoy.historicalprices.price.domain.exception.OverlappingPriceException;
+import com.luissoy.historicalprices.product.domain.exception.InvalidProductNameException;
+import com.luissoy.historicalprices.product.domain.exception.ProductNotFoundException;
+import com.luissoy.historicalprices.product.domain.valueobject.ProductId;
+import com.luissoy.historicalprices.product.infrastructure.rest.RestErrorResponse;
+import com.luissoy.historicalprices.shared.infrastructure.rest.ExceptionHandlerController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -63,18 +65,17 @@ class ExceptionHandlerControllerTest {
     }
 
     @Test
-    void handleExceptionInternal_shouldReturnCustomResponse() {
+    void handleExceptionInternal_shouldBuildCustomResponse_throughPublicPath() {
         var ex = new OverlappingPriceException();
-        var headers = new HttpHeaders();
         var request = mock(WebRequest.class);
 
-        var response = handler.handleExceptionInternal(ex, "custom body", headers, HttpStatus.CONFLICT, request);
+        var response = handler.badRequest(ex);
 
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        var body = (RestErrorResponse) response.getBody();
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        var body = response.getBody();
         assertNotNull(body);
-        assertEquals(409, body.getStatus());
-        assertEquals("Spring Exception", body.getError());
-        assertEquals("custom body", body.getMessage());
+        assertEquals(400, body.getStatus());
+        assertEquals("Domain error", body.getError());
+        assertEquals("Overlapping price periods detected", body.getMessage());
     }
 }

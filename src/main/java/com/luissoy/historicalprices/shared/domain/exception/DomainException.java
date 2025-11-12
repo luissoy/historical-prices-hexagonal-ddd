@@ -1,4 +1,4 @@
-package com.luissoy.historicalprices.domain.shared.exception;
+package com.luissoy.historicalprices.shared.domain.exception;
 
 public abstract class DomainException extends RuntimeException {
     protected DomainException(String message) {

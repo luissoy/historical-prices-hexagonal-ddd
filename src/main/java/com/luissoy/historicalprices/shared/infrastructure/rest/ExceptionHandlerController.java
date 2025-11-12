@@ -1,12 +1,13 @@
-package com.luissoy.historicalprices.infrastructure.in.rest.exception;
+package com.luissoy.historicalprices.shared.infrastructure.rest;
 
-import com.luissoy.historicalprices.domain.price.exception.PriceNotFoundException;
-import com.luissoy.historicalprices.domain.product.exception.InvalidProductDescriptionException;
-import com.luissoy.historicalprices.domain.product.exception.InvalidProductNameException;
-import com.luissoy.historicalprices.domain.shared.exception.NotFoundException;
-import com.luissoy.historicalprices.domain.shared.exception.ValidationException;
-import com.luissoy.historicalprices.domain.product.exception.ProductNotFoundException;
-import com.luissoy.historicalprices.domain.price.exception.OverlappingPriceException;
+import com.luissoy.historicalprices.price.domain.exception.OverlappingPriceException;
+import com.luissoy.historicalprices.price.domain.exception.PriceNotFoundException;
+import com.luissoy.historicalprices.product.domain.exception.InvalidProductDescriptionException;
+import com.luissoy.historicalprices.product.domain.exception.InvalidProductNameException;
+import com.luissoy.historicalprices.product.domain.exception.ProductNotFoundException;
+import com.luissoy.historicalprices.product.infrastructure.rest.RestErrorResponse;
+import com.luissoy.historicalprices.shared.domain.exception.NotFoundException;
+import com.luissoy.historicalprices.shared.domain.exception.ValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
