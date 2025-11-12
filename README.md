@@ -37,6 +37,38 @@ This project is structured as a **multi-module Maven application** using a **hex
 
 ---
 
+## 📂 File Structure
+
+```      
+│ pom.xml
+│ docker-compose.yml
+│ Dockerfile
+│ README.md
+│ Historical Prices API.postman_collection.json
+│
+├── api
+│ └── src/main/resources/openapi.yaml # OpenAPI specification
+│
+├── application
+│ ├── price/
+│ ├── product/
+│ └── dto/
+│
+├── domain
+│ ├── price/
+│ ├── product/
+│ └── shared/
+│
+└── infrastructure
+├── in/rest/controller/
+├── out/persistence/
+├── config/
+├── resources/
+└── HistoricalPricesApplication.java # Primary Spring Boot application class
+```
+
+---
+
 ## 🧠 Business Rules
 
 - Each product can have multiple prices.
@@ -165,6 +197,11 @@ mvnw test
 This runs unit and integration tests across all modules.
 
 The code coverage of the project is maintained above 80% including unit and integration tests.
+
+---
+
+## 📊 Postman aceptance tests
+Import the provided Postman collection `Historical Prices API.postman_collection.json` to run acceptance tests against the running API.
 
 ---
 
