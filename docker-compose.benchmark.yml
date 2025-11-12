@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  historical-prices-deploy-configuration-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: historical-prices-deploy-configuration-app
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  benchmark:
+    build:
+      context: .
+      dockerfile: Dockerfile.benchmark
+    container_name: product-benchmark
+    depends_on:
+      - historical-prices-deploy-configuration-app
+    command: sh -c "chmod +x /app/benchmark.sh && /app/benchmark.sh"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
