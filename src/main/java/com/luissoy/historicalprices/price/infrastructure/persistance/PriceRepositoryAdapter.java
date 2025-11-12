@@ -50,7 +50,7 @@ public class PriceRepositoryAdapter implements PriceRepository {
                 (rs, rowNum) -> mapper.resultSetToDomain(rs),
                 id.getValue()
         );
-        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PriceRepositoryAdapter implements PriceRepository {
                 date,
                 date
         );
-        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.luissoy.historicalprices.infrastructure;
+package com.luissoy.historicalprices;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
