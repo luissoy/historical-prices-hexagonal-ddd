@@ -58,13 +58,6 @@ public class ProductsController implements ProductsApi {
         return ResponseEntity.status(201).body(response);
     }
 
-    @GetMapping("/products/{productId}")
-    public ResponseEntity<ProductResponse> getProduct(@PathVariable Long productId) {
-        ProductResult result = getProductUseCase.execute(productId);
-        ProductResponse response = productApiMapper.toProductResponse(result);
-        return ResponseEntity.ok(response);
-    }
-
     @Override
     public ResponseEntity<PriceResponse> addPrice(Long productId, PriceRequest request) {
         AddPriceCommand command = priceApiMapper.toPriceCommand(productId, request);

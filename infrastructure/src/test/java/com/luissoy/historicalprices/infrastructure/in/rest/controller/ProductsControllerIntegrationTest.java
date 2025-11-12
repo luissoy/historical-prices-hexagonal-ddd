@@ -74,4 +74,13 @@ class ProductsControllerIntegrationTest {
         mockMvc.perform(get("/api/products/1/prices"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void shouldGetCurrentPrice() throws Exception {
+        String applicationDate = "2024-06-15";
+
+        mockMvc.perform(get("/api/products/{productId}/prices/current", 1)
+                        .param("date", applicationDate.toString()))
+                .andExpect(status().isOk());
+    }
 }
